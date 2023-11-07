@@ -41,25 +41,38 @@ pub fn main() {
 }
 
 pub type Event {
-  Event(id: String, pubkey: String, kind: Int, sig: String, content: String, created_at: Int, tags: List(List(String)))
+  Event(
+    id: String,
+    pubkey: String,
+    kind: Int,
+    sig: String,
+    content: String,
+    created_at: Int,
+    tags: List(List(String)),
+  )
 }
 
 fn handle_ws_message(state, conn, message) {
   case message {
     mist.Text(<<"[\"EVENT\",":utf8, _:bits>> as req) -> {
-      let event_decoder = dynamic.decode7(
-        Event,
-        field("id", of: dynamic.string),
-        field("pubkey", of: dynamic.string),
-        field("kind", of: dynamic.int),
-        field("sig", of: dynamic.string),
-        field("content", of: dynamic.string),
-        field("created_at", of: dynamic.int),
-        field("tags", of: dynamic.list(dynamic.list(dynamic.string))),
-      )
+      let event_decoder =
+        dynamic.decode7(
+          Event,
+          field("id", of: dynamic.string),
+          field("pubkey", of: dynamic.string),
+          field("kind", of: dynamic.int),
+          field("sig", of: dynamic.string),
+          field("content", of: dynamic.string),
+          field("created_at", of: dynamic.int),
+          field("tags", of: dynamic.list(dynamic.list(dynamic.string))),
+        )
       let payload_decoder = dynamic.tuple2(dynamic.string, event_decoder)
       let assert Ok(#(_, event)) = json.decode_bits(req, using: payload_decoder)
-      let assert Ok(_) = mist.send_text_frame(conn, <<"[\"OK\",\"":utf8, event.id:utf8, "\",true,\"\"]":utf8>>)
+      let assert Ok(_) =
+        mist.send_text_frame(
+          conn,
+          <<"[\"OK\",\"":utf8, event.id:utf8, "\",true,\"\"]":utf8>>,
+        )
       actor.continue(state)
     }
     mist.Text(_) | mist.Binary(_) | mist.Custom(_) -> actor.continue(state)
