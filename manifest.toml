@@ -4,14 +4,20 @@
 packages = [
   { name = "gleam_erlang", version = "0.23.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleam_erlang", source = "hex", outer_checksum = "DA7A8E5540948DE10EB01B530869F8FF2FF6CAD8CFDA87626CE6EF63EBBF87CB" },
   { name = "gleam_http", version = "3.5.1", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleam_http", source = "hex", outer_checksum = "0B09AAE8EB547C4F2F2D3F8917A0A4D2EF75DFF0232389332BAFE19DBBFDB92B" },
-  { name = "gleam_otp", version = "0.8.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "gleam_erlang"], otp_app = "gleam_otp", source = "hex", outer_checksum = "18EF8242A5E54BA92F717C7222F03B3228AEE00D1F286D4C56C3E8C18AA2588E" },
+  { name = "gleam_json", version = "0.7.0", build_tools = ["gleam"], requirements = ["thoas", "gleam_stdlib"], otp_app = "gleam_json", source = "hex", outer_checksum = "CB405BD93A8828BCD870463DE29375E7B2D252D9D124C109E5B618AAC00B86FC" },
+  { name = "gleam_otp", version = "0.8.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_stdlib"], otp_app = "gleam_otp", source = "hex", outer_checksum = "18EF8242A5E54BA92F717C7222F03B3228AEE00D1F286D4C56C3E8C18AA2588E" },
   { name = "gleam_stdlib", version = "0.32.0", build_tools = ["gleam"], requirements = [], otp_app = "gleam_stdlib", source = "hex", outer_checksum = "07D64C26D014CF570F8ACADCE602761EA2E74C842D26F2FD49B0D61973D9966F" },
   { name = "gleeunit", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "gleeunit", source = "hex", outer_checksum = "D3682ED8C5F9CAE1C928F2506DE91625588CC752495988CBE0F5653A42A6F334" },
-  { name = "glisten", version = "0.9.1", build_tools = ["gleam"], requirements = ["gleam_stdlib", "gleam_erlang", "gleam_otp"], otp_app = "glisten", source = "hex", outer_checksum = "91809C44C52456D96C8317A19246DE1C06ED494C40D282CD9380565E879A52C4" },
-  { name = "mist", version = "0.14.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_http", "gleam_stdlib", "glisten", "gleam_otp"], otp_app = "mist", source = "hex", outer_checksum = "7CDD0396D9A556F1069D83E9AF2B24388AAC478B9B4846615C6D4797E1D3C6A3" },
+  { name = "glisten", version = "0.9.1", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_otp", "gleam_stdlib"], otp_app = "glisten", source = "hex", outer_checksum = "91809C44C52456D96C8317A19246DE1C06ED494C40D282CD9380565E879A52C4" },
+  { name = "mist", version = "0.14.0", build_tools = ["gleam"], requirements = ["glisten", "gleam_stdlib", "gleam_otp", "gleam_http", "gleam_erlang"], otp_app = "mist", source = "hex", outer_checksum = "7CDD0396D9A556F1069D83E9AF2B24388AAC478B9B4846615C6D4797E1D3C6A3" },
+  { name = "thoas", version = "0.4.1", build_tools = ["rebar3"], requirements = [], otp_app = "thoas", source = "hex", outer_checksum = "4918D50026C073C4AB1388437132C77A6F6F7C8AC43C60C13758CC0ADCE2134E" },
 ]
 
 [requirements]
+gleam_erlang = { version = "~> 0.23" }
+gleam_http = { version = "~> 3.5" }
+gleam_json = { version = "~> 0.7" }
+gleam_otp = { version = "~> 0.8" }
 gleam_stdlib = { version = "~> 0.32" }
 gleeunit = { version = "~> 1.0" }
-mist = { version = ">= 0.0.0" }
+mist = { version = "~> 0.14" }
