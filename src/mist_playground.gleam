@@ -1,8 +1,10 @@
 import gleam/bytes_builder
+import gleam/dynamic.{field}
 import gleam/erlang/process
-import gleam/http/response.{type Response}
 import gleam/http/request.{type Request}
-import gleam/io
+import gleam/http/response.{type Response}
+// import gleam/io
+import gleam/json
 import gleam/option.{Some}
 import gleam/otp/actor
 import mist.{type Connection, type ResponseData}
@@ -24,7 +26,7 @@ pub fn main() {
           mist.websocket(
             request: req,
             on_init: fn() { #(state, Some(selector)) },
-            on_close: fn() { io.println("goodbye!") },
+            on_close: fn() { Nil },
             handler: handle_ws_message,
           )
 
@@ -38,10 +40,26 @@ pub fn main() {
   process.sleep_forever()
 }
 
+pub type Event {
+  Event(id: String, pubkey: String, kind: Int, sig: String, content: String, created_at: Int, tags: List(List(String)))
+}
+
 fn handle_ws_message(state, conn, message) {
   case message {
-    mist.Text(<<"ping":utf8, _:bits>>) -> {
-      let assert Ok(_) = mist.send_text_frame(conn, <<"pong":utf8>>)
+    mist.Text(<<"[\"EVENT\",":utf8, _:bits>> as req) -> {
+      let event_decoder = dynamic.decode7(
+        Event,
+        field("id", of: dynamic.string),
+        field("pubkey", of: dynamic.string),
+        field("kind", of: dynamic.int),
+        field("sig", of: dynamic.string),
+        field("content", of: dynamic.string),
+        field("created_at", of: dynamic.int),
+        field("tags", of: dynamic.list(dynamic.list(dynamic.string))),
+      )
+      let payload_decoder = dynamic.tuple2(dynamic.string, event_decoder)
+      let assert Ok(#(_, event)) = json.decode_bits(req, using: payload_decoder)
+      let assert Ok(_) = mist.send_text_frame(conn, <<"[\"OK\",\"":utf8, event.id:utf8, "\",true,\"\"]":utf8>>)
       actor.continue(state)
     }
     mist.Text(_) | mist.Binary(_) | mist.Custom(_) -> actor.continue(state)
