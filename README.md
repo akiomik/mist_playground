@@ -1,17 +1,17 @@
 # mist_playground
 
-## Run websocket server
-
-```sh
-gleam run
-```
-
 ## Envionments
 
 - PC: Apple MacBookPro 2021 M1 Max (aarch64)
 - `gleam`: 0.32.2
 - `golang`: 1.21.3
 - `xk6-nostr`: 0.1.0
+
+## Run websocket server
+
+```sh
+gleam run
+```
 
 ## Run benchmark
 
